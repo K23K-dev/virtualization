@@ -96,6 +96,7 @@ void context_switch(pcb_t *proc) {
  * Also clears the current-process state if this process was running.
  */
 void proc_cleanup(pcb_t *proc) {
+    // Locates process's page table.
     pfn_t ptbr = proc->saved_ptbr;
     pte_t *page_table = get_page_table(ptbr, mem);
     
@@ -114,7 +115,7 @@ void proc_cleanup(pcb_t *proc) {
         *entry = (pte_t){0};
     }
 
-    // Release the page-table frame, including its protection bit.
+    // Release the page-table frame itself, including its protection bit.
     frame_table[ptbr] = (fte_t){0};
 
     // Clear the current-process state if this process was running.
